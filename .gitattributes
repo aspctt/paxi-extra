@@ -1,9 +1,23 @@
-#
-# https://help.github.com/articles/dealing-with-line-endings/
-#
-# Linux start script should use lf
-/gradlew        text eol=lf
+# Text files: detected automatically, stored and checked out with LF endings.
+# "text=auto" rather than a bare "text" matters. Setting it outright declares
+# every file in the repository to be text, which overrides Git's own detection
+# and strips CR bytes out of binaries as they are committed. Nothing complains:
+# the file is compared after that same normalisation, so it reads as unchanged
+# while what is stored no longer matches what is on disk.
+* text=auto eol=lf
 
-# These are Windows script files and should use crlf
-*.bat           text eol=crlf
+# The Gradle wrapper scripts, which each platform expects in its own ending.
+gradlew text eol=lf
+*.bat text eol=crlf
 
+# Binaries, kept byte for byte. Auto-detection already covers these; naming them
+# is the belt to its braces, since the failure is silent and only shows up in a
+# fresh clone.
+*.dll binary
+*.pdb binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.psd binary
+*.ico binary
+*.zip binary

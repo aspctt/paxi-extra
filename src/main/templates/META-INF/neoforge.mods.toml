@@ -1,0 +1,49 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version_range}"
+license = "${mod_license}"
+issueTrackerURL = "https://github.com/aspctt/paxiextra-neoforge/issues"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+description = '''${mod_description}'''
+logoFile = "assets/paxiextra/icon.png"
+logoBlur = false
+authors = "${mod_authors}"
+displayURL = "https://modrinth.com/mod/paxiextra-neoforged"
+
+[[mixins]]
+config = "${mod_id}.mixins.json"
+
+[[dependencies.${mod_id}]]
+modId = "neoforge"
+type = "required"
+versionRange = "${neo_version_range}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"
+
+# Every mixin in this mod targets Paxi or a class Paxi has already changed, so without it there is
+# nothing to patch.
+[[dependencies.${mod_id}]]
+modId = "paxi"
+type = "required"
+versionRange = "${paxi_version_range}"
+ordering = "AFTER"
+side = "BOTH"
+
+# Paxi's own required dependency, named here as well because this mod calls into its JSON helper
+# directly rather than only through Paxi.
+[[dependencies.${mod_id}]]
+modId = "yungsapi"
+type = "required"
+versionRange = "${yungsapi_version_range}"
+ordering = "NONE"
+side = "BOTH"

@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.aspctt.paxiextra.mixin",
+  "compatibilityLevel": "JAVA_${java_version}",
+  "mixins": [
+    ${mixins}
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
