@@ -2,7 +2,7 @@ plugins {
     id("dev.kikugie.stonecutter")
 }
 
-stonecutter active "1.21.1"
+stonecutter active "1.21.1-neoforge"
 
 // Stonecutter rewrites the one shared source tree into versions/<target>/src for whichever target is
 // building, so two targets must never build at once. Ordering the build task serialises them.

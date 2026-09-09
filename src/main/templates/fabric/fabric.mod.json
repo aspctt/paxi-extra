@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": ["${mod_authors}"],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/paxi-extra",
+    "sources": "https://github.com/aspctt/paxi-extra",
+    "issues": "https://github.com/aspctt/paxi-extra/issues"
+  },
+  "license": "${mod_license}",
+  "icon": "assets/${mod_id}/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.aspctt.paxiextra.PaxiExtra"]
+  },
+  "mixins": ["${mod_id}.mixins.json"],
+  "depends": {
+    "fabricloader": "${loader_version_range}",
+    "minecraft": "${minecraft_version_range}",
+    "java": ">=${java_version}",
+    "paxi": "${paxi_version_range}",
+    "yungsapi": "${yungsapi_version_range}"
+  }
+}
