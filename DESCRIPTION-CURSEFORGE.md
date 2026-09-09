@@ -3,7 +3,7 @@
 <p style="text-align: center;">
 	<img src="https://img.shields.io/badge/Available_for-1.21.1_|_26.1-blue" alt="Version">
 	<img src="https://img.shields.io/badge/Requires-Paxi-blueviolet" alt="Requires">
-	<img src="https://img.shields.io/badge/License-LGPL--3.0-red" alt="License">
+	<img src="https://img.shields.io/badge/License-GPL--3.0--only-red" alt="License">
 </p>
 
 <p style="text-align: center;">
