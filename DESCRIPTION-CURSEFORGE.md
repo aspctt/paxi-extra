@@ -18,13 +18,14 @@
 	<a href="https://www.curseforge.com/minecraft/mc-mods/paxi-extra"><img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/curseforge_vector.svg" alt="Available on CurseForge"></a>
 </p>
 
-<p>This is an addon for Paxi, serving four purposes:</p>
+<p>This is an addon for Paxi, serving five purposes:</p>
 
 <ul>
   <li>Making it possible to use Paxi for built-in resource packs and data packs added by mods (See <a href="https://github.com/YUNG-GANG/Paxi/issues/27">#27</a>)</li>
   <li>Restricting Paxi from auto-loading packs in <code>config -&gt; paxi -&gt; resourcepacks</code> and <code>datapacks</code> if they're not listed in <code>resourcepack_load_order.json</code> or <code>datapack_load_order.json</code></li>
   <li>Letting Paxi generate the datapack folder and JSON file on start-up instead of after world generation</li>
   <li>Adding a <code>--user--</code> flag which lets you decide where your own packs go, handy if you want the packs you picked yourself to sit above the Paxi ones, or anywhere else you like</li>
+  <li>Removing the reorder arrows from packs Paxi loads, since the load order decides where those sit and a pack dragged up or down just snaps back</li>
 </ul>
 
 <h3 style="text-align: center;">How to use?</h3>

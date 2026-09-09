@@ -18,12 +18,13 @@
 
 ## Description
 
-This is an addon for [Paxi](https://modrinth.com/mod/paxi), serving four purposes:
+This is an addon for [Paxi](https://modrinth.com/mod/paxi), serving five purposes:
 
 - Making it possible to use Paxi for built-in resource packs and data packs added by mods <sub>(See [#27](https://github.com/YUNG-GANG/Paxi/issues/27))</sub>
 - Restricting Paxi from auto-loading packs in `config -> paxi -> resourcepacks` and `datapacks` if they're not listed in `resourcepack_load_order.json` or `datapack_load_order.json`
 - Letting Paxi generate the datapack folder and JSON file on start-up instead of after world generation
 - Adding a `--user--` flag which lets you decide where your own packs go, handy if you want the packs you picked yourself to sit above the Paxi ones, or anywhere else you like
+- Removing the reorder arrows from packs Paxi loads, since the load order decides where those sit and a pack dragged up or down just snaps back
 
 This is a port of [Paxi Plus](https://modrinth.com/mod/paxiplus) by Lancet_, renamed to keep the two projects apart.
 

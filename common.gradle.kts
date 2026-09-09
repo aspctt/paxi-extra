@@ -39,6 +39,12 @@ val mixins = listOf(
     "accessor.PackAccessor",
 ).joinToString(",\n    ") { "\"" + it + "\"" }
 
+// PackSelectionModel is the pack screen, so this one is client only and belongs in its own
+// section of the config, where a dedicated server will not try to load it.
+val clientMixins = listOf(
+    "PackSelectionModelEntryBaseMixin",
+).joinToString(",\n    ") { "\"" + it + "\"" }
+
 // Expand the declared properties into the mod metadata templates. Each loader's script contributes the
 // keys only its own metadata file uses.
 val commonMetadataProperties: Map<String, String> = mapOf(
@@ -56,6 +62,7 @@ val commonMetadataProperties: Map<String, String> = mapOf(
     "mod_authors_json" to prop("mod_authors").split(",").joinToString(", ") { "\"" + it.trim() + "\"" },
     "mod_description" to prop("mod_description"),
     "mixins" to mixins,
+    "client_mixins" to clientMixins,
 )
 extra["commonMetadataProperties"] = commonMetadataProperties
 
