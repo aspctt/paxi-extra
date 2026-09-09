@@ -10,6 +10,7 @@ plugins {
 val modArchivesName: String = property("mod_archives_name") as String
 val modVersion: String = property("mod_version") as String
 val minecraftVersion: String = property("minecraft_version") as String
+val modLoader: String = property("mod_loader") as String
 
 fun prop(name: String): String = property(name) as String
 
@@ -18,7 +19,10 @@ fun extraBuildMetadata(): String {
     return ".build.$buildNumber"
 }
 
-version = "$modVersion+$minecraftVersion" + extraBuildMetadata()
+// Everything after the "+" is semver build metadata, so it is ignored when versions are compared while
+// still naming the jar and showing up in the mods list. That is what makes one build tellable from
+// another on sight: PaxiExtra-1.2.0+1.21.1-neoforge.jar.
+version = "$modVersion+$minecraftVersion-$modLoader" + extraBuildMetadata()
 group = prop("mod_group_id")
 
 base {

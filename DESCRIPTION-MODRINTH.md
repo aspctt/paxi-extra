@@ -4,14 +4,14 @@
 
 ![Version](https://img.shields.io/badge/Available_for-1.21.1_|_26.1-blue)
 ![Requires](https://img.shields.io/badge/Requires-Paxi-blueviolet)
-![License](https://img.shields.io/badge/License-GPL--3.0--only-red)
+![License](https://img.shields.io/badge/License-LGPL--3.0--only-red)
 
 ![NeoForge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/neoforge_vector.svg)
 ![Fabric](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/unsupported/fabric_vector.svg)
 
-[![GitHub](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/github_vector.svg)](https://github.com/aspctt/paxiextra-neoforge)
-[![Modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/modrinth_vector.svg)](https://modrinth.com/mod/paxiextra-neoforged)
-[![CurseForge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/curseforge_vector.svg)](https://www.curseforge.com/minecraft/mc-mods/paxi-extra-neoforged)
+[![GitHub](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/github_vector.svg)](https://github.com/aspctt/paxi-extra)
+[![Modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/modrinth_vector.svg)](https://modrinth.com/mod/paxi-extra)
+[![CurseForge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/curseforge_vector.svg)](https://www.curseforge.com/minecraft/mc-mods/paxi-extra)
 
 </div>
 
@@ -23,7 +23,7 @@ This is a NeoForge port of [Paxi Plus](https://modrinth.com/mod/paxiplus) by Lan
 
 ### Built-in packs from mods can be ordered
 
-A load order entry that matches no file on disk is looked up among the packs mods have already contributed, and the matching one is re-created under Paxi's pack source, forced on, and placed where the file says. That covers a mod's own resource or data pack, whether or not the mod asks for it to be shown separately.
+See [Paxi #27](https://github.com/YUNG-GANG/Paxi/issues/27). A load order entry that matches no file on disk is looked up among the packs mods have already contributed, and the matching one is re-created under Paxi's pack source, forced on, and placed where the file says. That covers a mod's own resource or data pack, whether or not the mod asks for it to be shown separately.
 
 Write the pack's id rather than a file name:
 
@@ -37,6 +37,8 @@ Write the pack's id rather than a file name:
 ```
 
 Pack ids are not always guessable. [Resource Pack Overrides](https://modrinth.com/mod/resource-pack-overrides) shows them all: hold **D** on the resource pack screen.
+
+**This is an option, not an obligation.** `fabric`, `mod_data` and every other built-in pack keep working exactly as they always did if you leave them out of the load order.
 
 ### Nothing loads unless it is listed
 
@@ -60,7 +62,17 @@ Paxi packs are always on top of anything the player selected. Adding `--user--` 
 }
 ```
 
-Loading packs from any folder in the instance, rather than only from Paxi's own, is a feature of the Fabric addon that Paxi itself has carried since 1.21. Nothing here changes it.
+### What Paxi already does
+
+Two things the Fabric addon backported are not here, because Paxi itself has carried them since 1.21 (see [Paxi #33](https://github.com/YUNG-GANG/Paxi/issues/33)). A load order entry is resolved against the instance directory before Paxi's own folder, so packs can live anywhere:
+
+```json
+{
+  "loadOrder": ["resourcepacks/my_pack.zip"]
+}
+```
+
+Keeping packs in the normal `resourcepacks` folder rather than Paxi's also means Modrinth recognises them, so a modpack that embeds them is credited properly.
 
 ### Requirements
 
@@ -68,7 +80,7 @@ Minecraft 1.21.1 or 26.1 through 26.1.2, on NeoForge, with [Paxi](https://modrin
 
 ### License
 
-Paxi Extra is licensed under the GNU Lesser General Public License v3.0, the same licence as the Fabric mod it is ported from. The full terms are in [LICENSE](https://github.com/aspctt/paxiextra-neoforge/blob/main/LICENSE).
+Paxi Extra is licensed under the GNU Lesser General Public License v3.0, the same licence as the Fabric mod it is ported from. The full terms are in [LICENSE](https://github.com/aspctt/paxi-extra/blob/main/LICENSE).
 
 ### Credits
 
