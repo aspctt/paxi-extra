@@ -49,7 +49,7 @@
 
 <h3>Requirements</h3>
 
-<p>Minecraft 1.21.1 or 26.1 through 26.1.2, on either NeoForge or Fabric, with Paxi (<a href="https://www.curseforge.com/minecraft/mc-mods/paxi-neoforge">NeoForge</a> / <a href="https://www.curseforge.com/minecraft/mc-mods/paxi-fabric">Fabric</a>) and YUNG's API installed. Paxi already requires YUNG's API. Grab the file matching your loader: the jar name ends in <code>-neoforge</code> or <code>-fabric</code>.</p>
+<p>Minecraft 1.21.1 or 26.1 through 26.1.2, on either NeoForge or Fabric, with Paxi (<a href="https://www.curseforge.com/minecraft/mc-mods/paxi-neoforge">NeoForge</a> / <a href="https://www.curseforge.com/minecraft/mc-mods/paxi-fabric">Fabric</a>) and YUNG's API (<a href="https://www.curseforge.com/minecraft/mc-mods/yungs-api">NeoForge</a> / <a href="https://www.curseforge.com/minecraft/mc-mods/yungs-api-fabric">Fabric</a>) installed. Paxi already requires YUNG's API. Grab the file matching your loader: the jar name ends in <code>-neoforge</code> or <code>-fabric</code>.</p>
 
 <h3>License</h3>
 
