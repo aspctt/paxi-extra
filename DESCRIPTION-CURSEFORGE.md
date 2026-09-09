@@ -17,58 +17,35 @@
 	<a href="https://www.curseforge.com/minecraft/mc-mods/paxi-extra"><img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/curseforge_vector.svg" alt="Available on CurseForge"></a>
 </p>
 
-<p>Paxi Extra is an addon for <a href="https://www.curseforge.com/minecraft/mc-mods/paxi-neoforge">Paxi</a> that makes the load order file the whole story.</p>
+<p>This is an addon for <a href="https://www.curseforge.com/minecraft/mc-mods/paxi-neoforge">Paxi</a>, serving four purposes:</p>
 
-<p>Paxi force-loads resource packs and data packs for a modpack and orders them with a JSON file. Paxi Extra extends that file to reach packs Paxi cannot normally see, stops it loading packs it was never told about, and adds a marker for where the player's own packs belong in the stack.</p>
+<ul>
+  <li>Making it possible to use Paxi for built-in resource packs and data packs added by mods (See <a href="https://github.com/YUNG-GANG/Paxi/issues/27">#27</a>)</li>
+  <li>Restricting Paxi from auto-loading packs in <code>config -&gt; paxi -&gt; resourcepacks</code> and <code>datapacks</code> if they're not listed in <code>resourcepack_load_order.json</code> or <code>datapack_load_order.json</code></li>
+  <li>Letting Paxi generate the datapack folder and JSON file on start-up instead of after world generation</li>
+  <li>Adding a <code>--user--</code> flag which lets you decide where your own packs go, handy if you want the packs you picked yourself to sit above the Paxi ones, or anywhere else you like</li>
+</ul>
 
-<p>This is a NeoForge port of Paxi Plus by Lancet_, a Fabric mod for 1.20.1, renamed to keep the two projects apart.</p>
+<h3 style="text-align: center;">How to use?</h3>
 
-<h3>Built-in packs from mods can be ordered</h3>
-
-<p>See <a href="https://github.com/YUNG-GANG/Paxi/issues/27">Paxi #27</a>. A load order entry that matches no file on disk is looked up among the packs mods have already contributed, and the matching one is re-created under Paxi's pack source, forced on, and placed where the file says. That covers a mod's own resource or data pack, whether or not the mod asks for it to be shown separately.</p>
-
-<p>Write the pack's id rather than a file name:</p>
+<p>Write the packs you want, in the order you want them, and nothing else gets force-loaded:</p>
 
 <pre><code>{
   "loadOrder": [
+    "resourcepacks/my_base_pack.zip",
     "mod/somemod",
-    "my_overrides.zip"
-  ]
-}</code></pre>
-
-<p>Pack ids are not always guessable. <a href="https://www.curseforge.com/minecraft/mc-mods/resource-pack-overrides">Resource Pack Overrides</a> shows them all: hold <strong>D</strong> on the resource pack screen.</p>
-
-<p><strong>This is an option, not an obligation.</strong> <code>fabric</code>, <code>mod_data</code> and every other built-in pack keep working exactly as they always did if you leave them out of the load order.</p>
-
-<h3>Nothing loads unless it is listed</h3>
-
-<p>Paxi force-loads every pack sitting in <code>config/paxi/resourcepacks</code> and <code>config/paxi/datapacks</code>, ordered or not. Paxi Extra loads only what <code>resourcepack_load_order.json</code> and <code>datapack_load_order.json</code> name, so a pack can be left in the folder without being active and a modpack ships exactly the stack it declares.</p>
-
-<h3>The data pack folder exists before the first world</h3>
-
-<p>Paxi creates <code>config/paxi/datapacks</code> and its load order file the first time a world loads. Paxi Extra creates both while the game is still starting, so a fresh instance has them to edit right away.</p>
-
-<h3>--user-- marks where the player's packs sit</h3>
-
-<p>Paxi packs are always on top of anything the player selected. Adding <code>--user--</code> to a load order splits it: everything listed before the marker is placed underneath the player's own packs, everything after stays above them. Put it last and every Paxi pack sits below the player's, which is what you want when the modpack's packs are a base rather than an override.</p>
-
-<pre><code>{
-  "loadOrder": [
-    "modpack_base.zip",
     "--user--",
-    "modpack_overrides.zip"
+    "resourcepacks/my_overrides.zip"
   ]
 }</code></pre>
 
-<h3>What Paxi already does</h3>
+<p>Later in the list wins. Anything above <code>--user--</code> sits under the packs you picked yourself, anything below it sits on top of them. Leave <code>--user--</code> out and everything stays on top, the way Paxi normally does it.</p>
 
-<p>Two things the Fabric addon backported are not here, because Paxi itself has carried them since 1.21 (see <a href="https://github.com/YUNG-GANG/Paxi/issues/33">Paxi #33</a>). A load order entry is resolved against the instance directory before Paxi's own folder, so packs can live anywhere:</p>
+<p>For the built-in pack support you need the ID of the pack. You can check the mod's source, guess it, or use <a href="https://www.curseforge.com/minecraft/mc-mods/resource-pack-overrides">Resource Pack Overrides</a> and hold <strong>D</strong> on the resource pack screen to see the IDs of every pack. You can order <code>fabric</code> and <code>mod_resources</code> too, if you want all the mod assets to sit at a particular spot in the stack.</p>
 
-<pre><code>{
-  "loadOrder": ["resourcepacks/my_pack.zip"]
-}</code></pre>
+<p><strong>It is NOT required to load <code>fabric</code> and other built-in packs with Paxi, it's there as an optional feature.</strong></p>
 
-<p>Keeping packs in the normal <code>resourcepacks</code> folder rather than Paxi's also means Modrinth recognises them, so a modpack that embeds them is credited properly.</p>
+<p>Loading packs from anywhere in your instance rather than only Paxi's own folder already works, since Paxi itself has done that since 1.21. Keeping your packs in the normal <code>resourcepacks</code> folder also means Modrinth recognises them, so a modpack that includes them gets credited properly.</p>
 
 <h3>Requirements</h3>
 
@@ -76,8 +53,8 @@
 
 <h3>License</h3>
 
-<p>Paxi Extra is licensed under the GNU Lesser General Public License v3.0, the same licence as the Fabric mod it is ported from. The full terms are in <a href="https://github.com/aspctt/paxi-extra/blob/main/LICENSE">LICENSE</a>.</p>
+<p>Paxi Extra is licensed under the GNU Lesser General Public License v3.0, the same licence as the mod it is ported from. The full terms are in <a href="https://github.com/aspctt/paxi-extra/blob/main/LICENSE">LICENSE</a>.</p>
 
 <h3>Credits</h3>
 
-<p>Lancet_ wrote the original Fabric mod, with contributions from Fyoncle. Paxi is by YUNGNICKYOUNG. This port is by aspctt.</p>
+<p>Paxi Extra is a port of Paxi Plus by Lancet_, with contributions from Fyoncle, renamed to keep the two projects apart. Paxi itself is by YUNGNICKYOUNG.</p>
