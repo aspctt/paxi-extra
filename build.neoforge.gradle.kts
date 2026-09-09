@@ -74,6 +74,10 @@ dependencies {
     localRuntime("maven.modrinth:yungs-api:${prop("yungsapi_version")}")
 }
 
+// The other loader's entry point is the one file that cannot compile here. It lives in a package of
+// its own so it can simply be left out, rather than being carried as a commented-out block.
+sourceSets.main.get().java.exclude("**/fabric/**")
+
 // Expand the declared properties into the mod metadata templates. The shared keys come from
 // common.gradle.kts; the ones below exist only in neoforge.mods.toml.
 @Suppress("UNCHECKED_CAST")

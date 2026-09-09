@@ -28,8 +28,10 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
 
 loom {
     runs {
-        named("client") { runDir = rootProject.file("run").relativeTo(projectDir).path }
-        named("server") { runDir = rootProject.file("run-server").relativeTo(projectDir).path }
+        // One run directory shared by every target, so worlds, options and the Paxi config survive
+        // switching between them.
+        named("client") { runDir(rootProject.file("run").relativeTo(projectDir).path) }
+        named("server") { runDir(rootProject.file("run-server").relativeTo(projectDir).path) }
     }
 }
 
@@ -47,7 +49,18 @@ dependencies {
     modCompileOnly("maven.modrinth:yungs-api:${prop("yungsapi_version")}")
     modLocalRuntime("maven.modrinth:paxi:${prop("paxi_version")}")
     modLocalRuntime("maven.modrinth:yungs-api:${prop("yungsapi_version")}")
+
+    // Dev runtime only. YUNG's API nests these rather than depending on them, and Loom does not unpack a
+    // nested jar for a local runtime dependency, so a development run needs them on the classpath directly.
+    // A player installing YUNG's API gets them from inside its own jar, and Cloth Config from its own page.
+    localRuntime("org.reflections:reflections:0.10.2")
+    localRuntime("org.javassist:javassist:3.29.2-GA")
+    modLocalRuntime("maven.modrinth:cloth-config:${prop("cloth_config_version")}")
 }
+
+// The other loader's entry point is the one file that cannot compile here. It lives in a package of
+// its own so it can simply be left out, rather than being carried as a commented-out block.
+sourceSets.main.get().java.exclude("**/neoforge/**")
 
 // Expand the declared properties into the mod metadata templates. The shared keys come from
 // common.gradle.kts; the ones below exist only in fabric.mod.json.

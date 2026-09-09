@@ -34,9 +34,11 @@ public final class PaxiExtraPacks {
     public static Pack asPaxiPack(Pack original) {
         PackAccessor accessor = (PackAccessor) original;
         Pack.Metadata metadata = accessor.paxiExtra$metadata();
+        //? if neoforge {
         if (metadata.isHidden()) {
             // A mod's pack is discovered hidden unless the mod asks to be shown separately. Naming it in the
-            // load order is that request, so the copy is visible on the pack screen.
+            // load order is that request, so the copy is visible on the pack screen. Hiding is NeoForge's
+            // addition to Pack, as is the pack tree below it; on Fabric a pack is only ever itself.
             metadata = new Pack.Metadata(
                     metadata.description(),
                     metadata.compatibility(),
@@ -44,6 +46,7 @@ public final class PaxiExtraPacks {
                     metadata.overlays(),
                     false);
         }
+        //?}
 
         PackLocationInfo location = new PackLocationInfo(
                 original.getId(),
@@ -51,7 +54,10 @@ public final class PaxiExtraPacks {
                 PaxiPackSource.PACK_SOURCE_PAXI,
                 original.location().knownPackInfo());
         Pack copy = new Pack(location, accessor.paxiExtra$resources(), metadata, PAXI_PACK_SELECTION);
+        //? if neoforge {
         List<Pack> children = original.getChildren();
         return children.isEmpty() ? copy : copy.withChildren(children);
+        //?} else
+        /*return copy;*/
     }
 }

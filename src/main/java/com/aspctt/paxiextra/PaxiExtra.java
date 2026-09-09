@@ -3,18 +3,19 @@ package com.aspctt.paxiextra;
 import com.aspctt.paxiextra.util.PaxiExtraOrdering;
 import com.yungnickyoung.minecraft.paxi.PaxiCommon;
 import com.yungnickyoung.minecraft.yungsapi.io.JSON;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.loading.FMLPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 
-@Mod(PaxiExtra.MOD_ID)
-public class PaxiExtra {
+/**
+ * Everything the mod does at start-up, minus the part that differs by loader. Each loader has an entry
+ * point of its own that hands the two directories over, because that is the only thing NeoForge and Fabric
+ * disagree on here: NeoForge asks a mod for a constructor and Fabric for an interface, and each has its own
+ * way of naming the instance folder.
+ */
+public final class PaxiExtra {
     public static final String MOD_ID = "paxiextra";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
@@ -28,9 +29,12 @@ public class PaxiExtra {
     public static File DATA_PACK_DIRECTORY;
     public static File DATAPACK_ORDERING_FILE;
 
-    public PaxiExtra(IEventBus modEventBus, ModContainer modContainer) {
-        BASE_GAME_DIRECTORY = FMLPaths.GAMEDIR.get().toFile();
-        BASE_PACK_DIRECTORY = new File(FMLPaths.CONFIGDIR.get().toFile(), "paxi");
+    private PaxiExtra() {
+    }
+
+    public static void init(File gameDirectory, File configDirectory) {
+        BASE_GAME_DIRECTORY = gameDirectory;
+        BASE_PACK_DIRECTORY = new File(configDirectory, "paxi");
 
         // Paxi creates the data pack folder and its load order file inside loadPacks, which for server data
         // does not run until a world is loaded. Doing it here means a fresh instance has both to edit before

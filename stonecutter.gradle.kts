@@ -21,7 +21,13 @@ stonecutter parameters {
     // Available to source files as `//$ minecraft` swaps and in `//? if` conditions.
     swaps["minecraft"] = "\"${node.metadata.version}\";"
 
+    // Which loader this target builds for, so the handful of places the two genuinely differ can say so
+    // inline. Everything else, all six mixins included, compiles for both unchanged.
+    val fabric = node.metadata.project.endsWith("-fabric")
+    constants.put("fabric", fabric)
+    constants.put("neoforge", !fabric)
+
     // No replacements yet. Every Minecraft and Paxi class this mod touches has the same shape on both
-    // targets, so the source compiles unchanged; a rename that arrives later belongs here, and anything
-    // that changes arity, arguments or semantics belongs in an inline `//? if` where it is visible.
+    // Minecraft versions, so a rename that arrives later belongs here, and anything that changes arity,
+    // arguments or semantics belongs in an inline `//? if` where it is visible.
 }

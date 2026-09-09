@@ -14,7 +14,7 @@
   "icon": "assets/${mod_id}/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": ["com.aspctt.paxiextra.PaxiExtra"]
+    "main": ["com.aspctt.paxiextra.fabric.PaxiExtraFabric"]
   },
   "mixins": ["${mod_id}.mixins.json"],
   "depends": {
