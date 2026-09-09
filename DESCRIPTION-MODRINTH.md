@@ -7,7 +7,7 @@
 ![License](https://img.shields.io/badge/License-LGPL--3.0--only-red)
 
 ![NeoForge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/neoforge_vector.svg)
-![Fabric](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/unsupported/fabric_vector.svg)
+![Fabric](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/fabric_vector.svg)
 
 [![GitHub](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/github_vector.svg)](https://github.com/aspctt/paxi-extra)
 [![Modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/modrinth_vector.svg)](https://modrinth.com/mod/paxi-extra)
@@ -53,7 +53,7 @@ Loading packs from anywhere in your instance rather than only Paxi's own folder 
 
 ### Requirements
 
-Minecraft 1.21.1 or 26.1 through 26.1.2, on NeoForge, with [Paxi](https://modrinth.com/mod/paxi) and [YUNG's API](https://modrinth.com/mod/yungs-api) installed. Paxi already requires YUNG's API.
+Minecraft 1.21.1 or 26.1 through 26.1.2, on either NeoForge or Fabric, with [Paxi](https://modrinth.com/mod/paxi) and [YUNG's API](https://modrinth.com/mod/yungs-api) installed. Paxi already requires YUNG's API. Grab the file matching your loader: the jar name ends in `-neoforge` or `-fabric`.
 
 ### License
 

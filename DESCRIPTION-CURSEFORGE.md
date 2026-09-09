@@ -8,7 +8,7 @@
 
 <p style="text-align: center;">
 	<img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/neoforge_vector.svg" alt="NeoForge">
-	<img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/unsupported/fabric_vector.svg" alt="Fabric">
+	<img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/fabric_vector.svg" alt="Fabric">
 </p>
 
 <p style="text-align: center;">
@@ -17,7 +17,7 @@
 	<a href="https://www.curseforge.com/minecraft/mc-mods/paxi-extra"><img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/curseforge_vector.svg" alt="Available on CurseForge"></a>
 </p>
 
-<p>This is an addon for <a href="https://www.curseforge.com/minecraft/mc-mods/paxi-neoforge">Paxi</a>, serving four purposes:</p>
+<p>This is an addon for Paxi, serving four purposes:</p>
 
 <ul>
   <li>Making it possible to use Paxi for built-in resource packs and data packs added by mods (See <a href="https://github.com/YUNG-GANG/Paxi/issues/27">#27</a>)</li>
@@ -49,7 +49,7 @@
 
 <h3>Requirements</h3>
 
-<p>Minecraft 1.21.1 or 26.1 through 26.1.2, on NeoForge, with <a href="https://www.curseforge.com/minecraft/mc-mods/paxi-neoforge">Paxi</a> and <a href="https://www.curseforge.com/minecraft/mc-mods/yungs-api">YUNG's API</a> installed. Paxi already requires YUNG's API.</p>
+<p>Minecraft 1.21.1 or 26.1 through 26.1.2, on either NeoForge or Fabric, with Paxi and YUNG's API installed. Paxi already requires YUNG's API. Grab the file matching your loader: the jar name ends in <code>-neoforge</code> or <code>-fabric</code>.</p>
 
 <h3>License</h3>
 

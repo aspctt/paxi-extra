@@ -52,6 +52,8 @@ val commonMetadataProperties: Map<String, String> = mapOf(
     "mod_license" to prop("mod_license"),
     "mod_version" to project.version.toString(),
     "mod_authors" to prop("mod_authors"),
+    // fabric.mod.json wants a JSON array rather than the one comma-separated string the toml takes.
+    "mod_authors_json" to prop("mod_authors").split(",").joinToString(", ") { "\"" + it.trim() + "\"" },
     "mod_description" to prop("mod_description"),
     "mixins" to mixins,
 )

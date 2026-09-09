@@ -7,7 +7,7 @@
 ![License](https://img.shields.io/badge/License-LGPL--3.0--only-red)
 
 ![NeoForge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/neoforge_vector.svg)
-![Fabric](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/unsupported/fabric_vector.svg)
+![Fabric](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/fabric_vector.svg)
 
 [![GitHub](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/github_vector.svg)](https://github.com/aspctt/paxi-extra)
 [![Modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/modrinth_vector.svg)](https://modrinth.com/mod/paxi-extra)
@@ -56,9 +56,11 @@ Place the JAR in your `mods` folder, along with its dependencies below. Load ord
 ## Dependencies
 
 * Minecraft 1.21.1, or 26.1 through 26.1.2
-* NeoForge 21.1.0 or newer (1.21.1), 26.1.2.75 or newer (26.1)
+* NeoForge 21.1.0 or newer (1.21.1), 26.1.2.75 or newer (26.1), **or** Fabric Loader 0.16.0 or newer
 * [Paxi](https://modrinth.com/mod/paxi)
 * [YUNG's API](https://modrinth.com/mod/yungs-api), which Paxi already requires
+
+The jar name says which loader it is built for: `PaxiExtra-<version>+<minecraft version>-<loader>.jar`.
 
 ## Licensing
 
@@ -75,5 +77,5 @@ Paxi Extra is licensed under the **GNU Lesser General Public License v3.0**, the
 ### Built on
 
 * [Paxi](https://github.com/YUNG-GANG/Paxi) by YUNGNICKYOUNG - LGPL-3.0
-* [NeoForge](https://neoforged.net/) - mod loader
-* [Stonecutter](https://github.com/kikugie/stonecutter) - multi-version build
+* [NeoForge](https://neoforged.net/) and [Fabric](https://fabricmc.net/) - mod loaders
+* [Stonecutter](https://github.com/kikugie/stonecutter) - multi-loader, multi-version build
