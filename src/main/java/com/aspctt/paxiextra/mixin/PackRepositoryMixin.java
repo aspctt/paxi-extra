@@ -1,53 +1,62 @@
 package com.aspctt.paxiextra.mixin;
 
+import com.aspctt.paxiextra.PaxiExtra;
+import com.aspctt.paxiextra.interfaces.PackTricks;
 import com.aspctt.paxiextra.util.PaxiExtraDiscovery;
+import com.aspctt.paxiextra.util.PaxiExtraPacks;
+import com.google.common.collect.ImmutableMap;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackRepository;
-import net.minecraft.server.packs.repository.RepositorySource;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 /**
- * Records what each repository source contributes as discovery runs, so that by the time Paxi's source is
- * asked for its packs it can see everything found before it. That is what lets a load order name a pack a
- * mod provides rather than a file on disk.
+ * Resolves the load order entries that named no file, once every source has been asked for its packs.
  *
- * <p>NeoForge appends the sources mods register through {@code AddPackFindersEvent} after the built-in and
- * folder sources, so Paxi's source is always among the last to run and the map is complete by then.
+ * <p>Paxi's source cannot do this itself. It is one of many registered through
+ * {@code AddPackFindersEvent}, those fire in mod loading order, and a pack from a mod whose listener fires
+ * after Paxi's does not exist yet while Paxi is running. Waiting until discovery returns is the only point
+ * where the answer is the same regardless of where in the mod list the pack came from.
+ *
+ * <p>The resolved copy replaces the original under the same id, so the pack is not duplicated and every
+ * other entry stays exactly where the repository put it.
  */
 @Mixin(PackRepository.class)
 public abstract class PackRepositoryMixin {
-    @Unique
-    private final Map<String, Pack> paxiExtra$discovered = new LinkedHashMap<>();
-
     @WrapMethod(method = "discoverAvailable")
-    private Map<String, Pack> paxiExtra$publishDiscoveryInProgress(Operation<Map<String, Pack>> original) {
-        this.paxiExtra$discovered.clear();
-        PaxiExtraDiscovery.begin(this.paxiExtra$discovered);
+    private Map<String, Pack> paxiExtra$resolvePacksNamedInLoadOrder(Operation<Map<String, Pack>> original) {
+        PaxiExtraDiscovery.begin();
+        Map<String, Pack> discovered;
+        List<PaxiExtraDiscovery.DeferredPack> deferred;
         try {
-            return original.call();
+            discovered = original.call();
+            deferred = PaxiExtraDiscovery.deferred();
         } finally {
             PaxiExtraDiscovery.end();
-            this.paxiExtra$discovered.clear();
         }
-    }
 
-    @WrapOperation(
-            method = "discoverAvailable",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/packs/repository/RepositorySource;loadPacks(Ljava/util/function/Consumer;)V"))
-    private void paxiExtra$recordDiscoveredPacks(RepositorySource source, Consumer<Pack> packAdder,
-                                                Operation<Void> original) {
-        original.call(source, (Consumer<Pack>) pack -> {
-            pack.streamSelfAndChildren().forEach(child -> this.paxiExtra$discovered.put(child.getId(), child));
-            packAdder.accept(pack);
-        });
+        if (deferred.isEmpty()) {
+            return discovered;
+        }
+
+        // A LinkedHashMap so that replacing an entry leaves it where it was, and everything already
+        // discovered keeps the order the repository put it in.
+        Map<String, Pack> resolved = new LinkedHashMap<>(discovered);
+        for (PaxiExtraDiscovery.DeferredPack entry : deferred) {
+            Pack originalPack = resolved.get(entry.id());
+            if (originalPack == null) {
+                PaxiExtra.LOGGER.error("Unable to find pack with name {} specified in the load order file! Skipping...", entry.id());
+                continue;
+            }
+            Pack paxiPack = PaxiExtraPacks.asPaxiPack(originalPack);
+            ((PackTricks) paxiPack).paxiExtra$setBelowUserPacks(entry.belowUserPacks());
+            resolved.put(entry.id(), paxiPack);
+        }
+        return ImmutableMap.copyOf(resolved);
     }
 }

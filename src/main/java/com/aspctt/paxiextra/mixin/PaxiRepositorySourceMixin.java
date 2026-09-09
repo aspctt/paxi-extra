@@ -3,9 +3,9 @@ package com.aspctt.paxiextra.mixin;
 import com.aspctt.paxiextra.PaxiExtra;
 import com.aspctt.paxiextra.interfaces.PackTricks;
 import com.aspctt.paxiextra.mixin.accessor.FolderRepositorySourceAccessor;
-import com.aspctt.paxiextra.mixin.accessor.PackAccessor;
 import com.aspctt.paxiextra.util.PaxiExtraDiscovery;
 import com.aspctt.paxiextra.util.PaxiExtraOrdering;
+import com.aspctt.paxiextra.util.PaxiExtraPacks;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.yungnickyoung.minecraft.paxi.PaxiCommon;
@@ -14,7 +14,6 @@ import com.yungnickyoung.minecraft.paxi.PaxiRepositorySource;
 import com.yungnickyoung.minecraft.yungsapi.io.JSON;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackLocationInfo;
-import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.repository.Pack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,7 +28,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -53,14 +51,6 @@ public abstract class PaxiRepositorySourceMixin {
      */
     @Unique
     private static final String USER_PACKS_MARKER = "--user--";
-
-    /**
-     * Paxi packs are always on and always at the top; the load order is what decides their order among
-     * themselves.
-     */
-    @Unique
-    private static final PackSelectionConfig PAXI_PACK_SELECTION =
-            new PackSelectionConfig(true, Pack.Position.TOP, false);
 
     @Shadow
     @Final
@@ -106,8 +96,6 @@ public abstract class PaxiRepositorySourceMixin {
             return;
         }
 
-        Map<String, Pack> alreadyDiscovered = PaxiExtraDiscovery.available();
-
         // Only meaningful once the marker is known to be in the file at all. Without it every pack keeps
         // Paxi's usual placement above the player's packs.
         boolean belowUserPacks = paxiExtra$containsUserMarker(entries);
@@ -118,14 +106,20 @@ public abstract class PaxiRepositorySourceMixin {
                 continue;
             }
 
-            Pack pack = paxiExtra$packFromFile(entry, folder, self);
-            if (pack == null) {
-                pack = paxiExtra$packFromAlreadyDiscovered(entry, alreadyDiscovered);
-            }
-            if (pack == null) {
+            File packFile = paxiExtra$findPackFile(entry, folder);
+            if (packFile == null) {
+                // Names no file, so it may name a pack a mod provides. Those cannot be looked up yet, since
+                // the source contributing it may not have run. The id keeps its place in the load order and
+                // the repository fills it in once every source has been asked.
+                this.orderedPaxiPacks.add(entry);
+                PaxiExtraDiscovery.defer(entry, belowUserPacks);
                 continue;
             }
 
+            Pack pack = paxiExtra$packFromFile(entry, packFile, self);
+            if (pack == null) {
+                continue;
+            }
             ((PackTricks) pack).paxiExtra$setBelowUserPacks(belowUserPacks);
             this.orderedPaxiPacks.add(pack.getId());
             packAdder.accept(pack);
@@ -136,19 +130,23 @@ public abstract class PaxiRepositorySourceMixin {
      * Resolves an entry against the instance directory first and the Paxi pack folder second, which is what
      * lets a load order point at a pack anywhere in the instance rather than only inside Paxi's own folder.
      *
-     * @return the pack, or null if the entry names no readable pack file, in which case it may still name a
-     *         pack that a mod provides
+     * @return the file, or null if the entry names none, in which case it may name a pack a mod provides
      */
     @Unique
-    private Pack paxiExtra$packFromFile(String entry, File folder, FolderRepositorySourceAccessor self) {
+    private File paxiExtra$findPackFile(String entry, File folder) {
         File packFile = new File(PaxiExtra.BASE_GAME_DIRECTORY, entry);
         if (!packFile.exists()) {
             packFile = new File(folder, entry);
         }
-        if (!packFile.exists()) {
-            return null;
-        }
+        return packFile.exists() ? packFile : null;
+    }
 
+    /**
+     * {@return the pack the given file holds, or null if it is not a pack this can read, which is an error
+     * rather than something to look for elsewhere}
+     */
+    @Unique
+    private Pack paxiExtra$packFromFile(String entry, File packFile, FolderRepositorySourceAccessor self) {
         if (!PACK_FILTER.accept(packFile)) {
             PaxiCommon.LOGGER.error("Attempted to load pack {} but it is not a valid pack format! It may be missing a pack.mcmeta file. Skipping...", entry);
             return null;
@@ -161,49 +159,11 @@ public abstract class PaxiRepositorySourceMixin {
                 location,
                 this.createPackResourcesSupplier(packFile.toPath()),
                 self.paxiExtra$packType(),
-                PAXI_PACK_SELECTION);
+                PaxiExtraPacks.PAXI_PACK_SELECTION);
         if (pack == null) {
             PaxiCommon.LOGGER.error("Unable to read the metadata of pack {}! Skipping...", entry);
         }
         return pack;
-    }
-
-    /**
-     * Re-creates a pack another source already contributed, under Paxi's pack source and forced on, so the
-     * load order can position a pack that ships inside a mod. The copy carries the original's resources and
-     * metadata across, so nothing is read a second time and a pack that supplies its metadata in code is
-     * copied as faithfully as one backed by a file.
-     *
-     * <p>It also keeps the original's id, so it replaces rather than duplicates that entry once discovery
-     * finishes, and a selection saved against that id still resolves.
-     */
-    @Unique
-    private Pack paxiExtra$packFromAlreadyDiscovered(String entry, Map<String, Pack> alreadyDiscovered) {
-        Pack original = alreadyDiscovered.get(entry);
-        if (original == null) {
-            PaxiCommon.LOGGER.error("Unable to find pack with name {} specified in load ordering JSON file {}! Skipping...", entry, this.orderingFile.getName());
-            return null;
-        }
-
-        PackAccessor accessor = (PackAccessor) original;
-        Pack.Metadata metadata = accessor.paxiExtra$metadata();
-        if (metadata.isHidden()) {
-            // A mod's pack is discovered hidden unless the mod asks to be shown separately. Naming it in the
-            // load order is that request, so the copy is visible on the pack screen.
-            metadata = new Pack.Metadata(
-                    metadata.description(),
-                    metadata.compatibility(),
-                    metadata.requestedFeatures(),
-                    metadata.overlays(),
-                    false);
-        }
-
-        PackLocationInfo location = new PackLocationInfo(
-                original.getId(),
-                original.getTitle(),
-                PaxiPackSource.PACK_SOURCE_PAXI,
-                original.location().knownPackInfo());
-        return new Pack(location, accessor.paxiExtra$resources(), metadata, PAXI_PACK_SELECTION);
     }
 
     @Unique
