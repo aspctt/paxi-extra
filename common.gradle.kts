@@ -67,8 +67,11 @@ val commonMetadataProperties: Map<String, String> = mapOf(
 extra["commonMetadataProperties"] = commonMetadataProperties
 
 tasks.named<Jar>("jar") {
+    // Read up front, so the rename lambda captures a string rather than this script, which the
+    // configuration cache cannot serialise.
+    val licenseSuffix = "_" + prop("mod_archives_name")
     from(rootProject.file("LICENSE")) {
-        rename { "${it}_${prop("mod_archives_name")}" }
+        rename { it + licenseSuffix }
     }
 }
 

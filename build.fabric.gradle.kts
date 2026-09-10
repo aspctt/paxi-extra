@@ -30,8 +30,8 @@ loom {
     runs {
         // One run directory shared by every target, so worlds, options and the Paxi config survive
         // switching between them.
-        named("client") { runDir(rootProject.file("run").relativeTo(projectDir).path) }
-        named("server") { runDir(rootProject.file("run-server").relativeTo(projectDir).path) }
+        named("client") { runDirectory.set(rootProject.file("run")) }
+        named("server") { runDirectory.set(rootProject.file("run-server")) }
     }
 }
 

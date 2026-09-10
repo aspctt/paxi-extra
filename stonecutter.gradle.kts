@@ -4,13 +4,15 @@ plugins {
 
 stonecutter active "1.21.1-neoforge"
 
-// Stonecutter rewrites the one shared source tree into versions/<target>/src for whichever target is
-// building, so two targets must never build at once. Ordering the build task serialises them.
+// Runs the targets' builds one at a time, in version order, rather than side by side. Not needed for
+// correctness: each target preprocesses the shared source into its own build directory and never writes
+// back to it, so this only keeps a full build's output grouped per target.
 stonecutter tasks {
     order("build", versionComparator)
 }
 
-// What CI and a release run. Building the root project alone only covers the active target.
+// A named entry point for CI and release runs. A plain ./gradlew build from the root builds every target
+// too, since it runs build in each of them.
 tasks.register("buildAll") {
     group = "project"
     description = "Builds every Stonecutter target."
