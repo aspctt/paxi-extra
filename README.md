@@ -81,3 +81,7 @@ Paxi Extra is licensed under the **GNU Lesser General Public License v3.0**, the
 * [Paxi](https://github.com/YUNG-GANG/Paxi) by YUNGNICKYOUNG - LGPL-3.0
 * [NeoForge](https://neoforged.net/) and [Fabric](https://fabricmc.net/) - mod loaders
 * [Stonecutter](https://github.com/kikugie/stonecutter) - multi-loader, multi-version build
+
+<p align=center>
+	<a alt="BuyMeACoffee" href="https://buymeacoffee.com/aspctt"><img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/donate/buymeacoffee-singular_vector.svg"></a>
+</p>
