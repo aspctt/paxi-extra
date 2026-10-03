@@ -64,3 +64,9 @@ Paxi Extra is licensed under the GNU Lesser General Public License v3.0, the sam
 ### Credits
 
 Paxi Extra is a port of [Paxi Plus](https://modrinth.com/mod/paxiplus) by Lancet_, with contributions from Fyoncle, renamed to keep the two projects apart. Paxi itself is by YUNGNICKYOUNG.
+
+<div align="center">
+
+[![BuyMeACoffee](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/donate/buymeacoffee-singular_vector.svg)](https://buymeacoffee.com/aspctt)
+
+</div>

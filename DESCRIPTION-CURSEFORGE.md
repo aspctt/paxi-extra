@@ -60,3 +60,7 @@
 <h3>Credits</h3>
 
 <p>Paxi Extra is a port of Paxi Plus by Lancet_, with contributions from Fyoncle, renamed to keep the two projects apart. Paxi itself is by YUNGNICKYOUNG.</p>
+
+<p style="text-align: center;">
+	<a alt="BuyMeACoffee" href="https://buymeacoffee.com/aspctt"><img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/donate/buymeacoffee-singular_vector.svg"></a>
+</p>
